@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autority — Todos tus pagos en un solo lugar</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #2ECC71;
+    --green-dark: #27ae60;
+    --black: #0D0D0D;
+    --white: #FFFFFF;
+    --gray-50: #F7F7F7;
+    --gray-100: #EFEFEF;
+    --gray-200: #E0E0E0;
+    --gray-600: #666666;
+    --gray-800: #222222;
+    --card-blue:   #3B4CF7;
+    --card-green:  #6DED8A;
+    --card-purple: #9B5CF6;
+    --card-orange: #E07B00;
+    --card-yellow: #F5C800;
+    --font: 'Poppins', sans-serif;
+    --radius: 20px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); background: var(--white); color: var(--black); overflow-x: hidden; line-height: 1.6; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 200;
+    background: rgba(255,255,255,0.97); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--gray-100);
+    height: 68px; display: flex; align-items: center;
+    padding: 0 5vw; justify-content: space-between;
+  }
+  .nav-logo { font-size: 22px; font-weight: 800; color: var(--black); letter-spacing: -0.5px; text-decoration: none; }
+  .logo-dot { color: var(--green); }
+  .nav-links { display: flex; align-items: center; gap: 2.5rem; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--gray-600); text-decoration: none; transition: color .2s; }
+  .nav-links a:hover { color: var(--black); }
+  .nav-links a.active { font-weight: 700; color: var(--green); }
+  .nav-actions { display: flex; gap: 12px; align-items: center; }
+  .btn-login { font-family: var(--font); font-size: 14px; font-weight: 600; color: var(--black); background: transparent; border: 1.5px solid var(--gray-200); padding: 9px 22px; border-radius: 50px; cursor: pointer; transition: all .2s; text-decoration: none; }
+  .btn-login:hover { border-color: var(--black); }
+  .btn-register { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--white); background: var(--black); border: none; padding: 10px 24px; border-radius: 50px; cursor: pointer; transition: all .2s; }
+  .btn-register:hover { background: var(--gray-800); transform: scale(1.02); }
+
+  /* ── HERO ── */
+  .hero { background: var(--black); padding: 7rem 5vw 5rem; position: relative; overflow: hidden; min-height: 88vh; display: flex; align-items: center; }
+  .hero-glow { position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; }
+  .hero-glow.g1 { width: 600px; height: 600px; background: rgba(46,204,113,0.15); top: -150px; right: -100px; }
+  .hero-glow.g2 { width: 400px; height: 400px; background: rgba(59,76,247,0.12); bottom: -100px; left: 10%; }
+  .hero-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; position: relative; z-index: 2; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(46,204,113,0.12); border: 1px solid rgba(46,204,113,0.35); color: var(--green); font-size: 11px; font-weight: 700; padding: 6px 16px; border-radius: 50px; margin-bottom: 1.75rem; letter-spacing: 1px; text-transform: uppercase; }
+  .badge-pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: blink 2s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
+  .hero h1 { font-size: clamp(38px, 4.5vw, 64px); font-weight: 800; color: var(--white); line-height: 1.08; letter-spacing: -2px; margin-bottom: 1.25rem; }
+  .hero h1 em { color: var(--green); font-style: normal; }
+  .hero-sub { font-size: 17px; color: rgba(255,255,255,0.58); max-width: 500px; line-height: 1.75; margin-bottom: 2.25rem; font-weight: 400; }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 3rem; }
+  .btn-hero-primary { font-family: var(--font); background: var(--green); color: var(--black); font-size: 15px; font-weight: 800; padding: 15px 32px; border-radius: 50px; border: none; cursor: pointer; transition: all .2s; }
+  .btn-hero-primary:hover { background: var(--green-dark); transform: translateY(-2px); }
+  .btn-hero-ghost { font-family: var(--font); background: transparent; color: rgba(255,255,255,0.8); font-size: 15px; font-weight: 600; padding: 15px 32px; border-radius: 50px; border: 1.5px solid rgba(255,255,255,0.2); cursor: pointer; transition: all .2s; }
+  .btn-hero-ghost:hover { border-color: var(--green); color: var(--green); }
+
+  /* Phone mockup */
+  .hero-visual { display: flex; justify-content: center; position: relative; }
+  .phone { width: 290px; background: #141414; border-radius: 40px; border: 1px solid rgba(255,255,255,0.09); padding: 26px 22px 30px; box-shadow: 0 50px 100px rgba(0,0,0,0.7); }
+  .phone-pill { width: 80px; height: 5px; background: rgba(255,255,255,0.12); border-radius: 3px; margin: 0 auto 22px; }
+  .phone-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .phone-greeting { font-size: 10px; color: rgba(255,255,255,0.4); }
+  .phone-username { font-size: 15px; font-weight: 700; color: white; }
+  .phone-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--black); }
+  .balance-card { background: var(--green); border-radius: 18px; padding: 18px 16px; margin-bottom: 14px; }
+  .bal-lbl { font-size: 10px; color: rgba(0,0,0,0.55); font-weight: 600; letter-spacing: 0.5px; }
+  .bal-amt { font-size: 30px; font-weight: 800; color: var(--black); margin: 3px 0 10px; letter-spacing: -1px; }
+  .bal-row { display: flex; justify-content: space-between; font-size: 10px; color: rgba(0,0,0,0.5); font-weight: 500; }
+  .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+  .qb { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 9px 4px 8px; text-align: center; cursor: pointer; transition: background .2s; }
+  .qb:hover { background: rgba(46,204,113,0.15); }
+  .qb-icon { font-size: 17px; margin-bottom: 4px; }
+  .qb-lbl { font-size: 8.5px; color: rgba(255,255,255,0.5); font-weight: 500; }
+  .txs-title { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .tx { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .tx-ico { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .tx-nm { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.85); }
+  .tx-dt { font-size: 9px; color: rgba(255,255,255,0.3); }
+  .tx-am { font-size: 11px; font-weight: 700; margin-left: auto; }
+  .tx-am.neg { color: rgba(255,255,255,0.65); }
+  .tx-am.pos { color: var(--green); }
+  .fb { position: absolute; background: rgba(18,18,18,0.92); border: 1px solid rgba(46,204,113,0.45); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 9px; }
+  .fb.f1 { top: 40px; left: -70px; animation: fly 3.5s ease-in-out infinite; }
+  .fb.f2 { bottom: 80px; right: -60px; animation: fly 3.5s ease-in-out infinite 1.8s; }
+  @keyframes fly { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+  .fb-ico { font-size: 20px; }
+  .fb-lbl { font-size: 9px; color: rgba(255,255,255,0.4); font-weight: 500; }
+  .fb-val { font-size: 13px; font-weight: 800; color: white; }
+  .fb-val.green { color: var(--green); }
+
+  /* ── SECTIONS BASE ── */
+  section { padding: 6rem 5vw; }
+  .si { max-width: 1200px; margin: 0 auto; }
+  .stag { font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 10px; }
+  .stitle { font-size: clamp(28px, 3.5vw, 46px); font-weight: 800; letter-spacing: -1.5px; color: var(--black); line-height: 1.1; margin-bottom: 14px; }
+  .ssub { font-size: 16px; color: var(--gray-600); max-width: 520px; line-height: 1.75; font-weight: 400; }
+
+  /* ── CREDIBILITY STRIP ── */
+  .cred-strip { background: var(--black); padding: 2.5rem 5vw; border-top: 1px solid rgba(255,255,255,0.06); }
+  .cred-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; align-items: center; gap: 0; flex-wrap: wrap; }
+  .cred-item { text-align: center; padding: 1rem 4rem; position: relative; }
+  .cred-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: rgba(255,255,255,0.1); }
+  .cred-num { font-size: 38px; font-weight: 900; color: var(--white); letter-spacing: -2px; line-height: 1; }
+  .cred-num span { color: var(--green); }
+  .cred-lbl { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 5px; font-weight: 400; }
+
+  /* ── SERVICES ── */
+  .services-sec { background: var(--gray-50); }
+  .services-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .svc-card { border-radius: var(--radius); padding: 28px 26px 24px; cursor: pointer; transition: transform .22s, box-shadow .22s; min-height: 230px; display: flex; flex-direction: column; justify-content: space-between; }
+  .svc-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.18); }
+  .svc-card.blue   { background: var(--card-blue); }
+  .svc-card.green  { background: var(--card-green); }
+  .svc-card.purple { background: var(--card-purple); }
+  .svc-card.orange { background: var(--card-orange); }
+  .svc-card.yellow { background: var(--card-yellow); }
+  .svc-card.coming { background: var(--white); border: 1.5px solid var(--gray-200); }
+  .svc-title { font-size: 20px; font-weight: 800; margin-bottom: 14px; }
+  .svc-card.blue .svc-title, .svc-card.purple .svc-title, .svc-card.orange .svc-title { color: var(--white); }
+  .svc-card.green .svc-title, .svc-card.yellow .svc-title, .svc-card.coming .svc-title { color: var(--black); }
+  .svc-links { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .svc-links li { display: flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .svc-links li .ico { text-decoration: none; font-size: 13px; }
+  .svc-card.blue .svc-links li, .svc-card.purple .svc-links li, .svc-card.orange .svc-links li { color: rgba(255,255,255,0.9); }
+  .svc-card.green .svc-links li, .svc-card.yellow .svc-links li { color: rgba(0,0,0,0.8); }
+  .svc-cta { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; margin-top: 16px; }
+  .svc-card.blue .svc-cta, .svc-card.purple .svc-cta, .svc-card.orange .svc-cta { color: var(--white); }
+  .svc-card.green .svc-cta, .svc-card.yellow .svc-cta { color: rgba(0,0,0,0.65); }
+  .svc-card.coming .svc-cta { color: var(--green); }
+  .coming-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .coming-list li { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--gray-600); }
+  .coming-dot { width: 20px; height: 20px; border-radius: 6px; background: var(--green); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: var(--black); }
+
+  /* ── HOW IT WORKS ── */
+  .how-sec { background: var(--white); }
+  .how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-top: 3.5rem; }
+  .how-steps { display: flex; flex-direction: column; gap: 0; }
+  .how-step { display: flex; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--gray-100); position: relative; cursor: default; transition: all .2s; }
+  .how-step:last-child { border-bottom: none; }
+  .how-step:hover .how-step-num { background: var(--green); color: var(--black); }
+  .how-step-num { width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; border: 2px solid var(--green); color: var(--green); font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+  .how-step-title { font-size: 17px; font-weight: 800; color: var(--black); margin-bottom: 5px; }
+  .how-step-desc { font-size: 14px; color: var(--gray-600); line-height: 1.7; font-weight: 400; }
+  .how-visual { background: var(--gray-50); border-radius: 24px; padding: 32px; border: 1.5px solid var(--gray-200); }
+  .how-screen { background: var(--white); border-radius: 16px; padding: 20px; border: 1px solid var(--gray-200); margin-bottom: 12px; }
+  .how-screen-title { font-size: 11px; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+  .how-service-row { display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--gray-50); border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: background .2s; }
+  .how-service-row:hover { background: #e6faf1; }
+  .how-svc-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .how-svc-icon.blue { background: rgba(59,76,247,0.1); }
+  .how-svc-icon.green { background: rgba(46,204,113,0.1); }
+  .how-svc-icon.purple { background: rgba(155,92,246,0.1); }
+  .how-svc-name { font-size: 13px; font-weight: 600; color: var(--black); }
+  .how-svc-sub { font-size: 11px; color: var(--gray-600); }
+  .how-svc-arrow { margin-left: auto; font-size: 14px; color: var(--gray-600); }
+  .how-confirm-box { background: var(--green); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .how-confirm-label { font-size: 11px; color: rgba(0,0,0,0.6); font-weight: 500; }
+  .how-confirm-val { font-size: 18px; font-weight: 800; color: var(--black); }
+  .how-confirm-badge { background: rgba(0,0,0,0.15); border-radius: 20px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: var(--black); }
+
+  /* ── PAY ── */
+  .pay-sec { background: var(--black); }
+  .pay-sec .stitle { color: var(--white); }
+  .pay-sec .ssub { color: rgba(255,255,255,0.5); }
+  .new-pill { display: inline-block; background: var(--green); color: var(--black); font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 50px; margin-left: 10px; vertical-align: middle; letter-spacing: 0.5px; }
+  .pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 3.5rem; }
+  .pay-feat { display: flex; gap: 16px; padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.025); margin-bottom: 12px; transition: border-color .2s, background .2s; cursor: default; }
+  .pay-feat:hover { border-color: rgba(46,204,113,0.4); background: rgba(46,204,113,0.05); }
+  .pay-feat-ico { width: 46px; height: 46px; flex-shrink: 0; background: rgba(46,204,113,0.13); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .pay-feat-title { font-size: 15px; font-weight: 700; color: white; margin-bottom: 4px; }
+  .pay-feat-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+  .pay-box { background: #111; border-radius: 20px; border: 1px solid rgba(255,255,255,0.07); padding: 28px; }
+  .pay-box-header { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 22px; }
+  .pay-row { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .pay-chip { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 14px 12px; }
+  .pay-chip-lbl { font-size: 10px; color: rgba(255,255,255,0.35); font-weight: 500; }
+  .pay-chip-val { font-size: 14px; font-weight: 700; color: white; margin-top: 3px; }
+  .pay-chip-sub { font-size: 10px; color: rgba(255,255,255,0.25); margin-top: 2px; }
+  .arrow-btn { width: 38px; height: 38px; flex-shrink: 0; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--black); font-weight: 900; }
+  .pay-amount-box { background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.28); border-radius: 14px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .pay-amount-lbl { font-size: 11px; color: rgba(255,255,255,0.45); font-weight: 500; }
+  .pay-amount-val { font-size: 26px; font-weight: 800; color: var(--green); letter-spacing: -0.5px; }
+  .pay-instant-lbl { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--green); }
+  .pay-btn { width: 100%; background: var(--green); color: var(--black); border: none; padding: 15px; border-radius: 12px; font-family: var(--font); font-size: 15px; font-weight: 800; cursor: pointer; transition: background .2s; }
+  .pay-btn:hover { background: var(--green-dark); }
+
+  /* ── SECURITY ── */
+  .sec-section { background: var(--black); }
+  .sec-section .stitle { color: var(--white); }
+  .sec-section .ssub { color: rgba(255,255,255,0.5); }
+  .sec-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .sec-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 2rem 1.5rem; text-align: center; transition: border-color .2s, transform .2s; cursor: default; }
+  .sec-card:hover { border-color: rgba(46,204,113,0.4); transform: translateY(-3px); }
+  .sec-ico { font-size: 32px; margin-bottom: 1rem; }
+  .sec-title { font-size: 15px; font-weight: 800; color: var(--white); margin-bottom: 8px; }
+  .sec-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.65; }
+
+  /* ── TESTIMONIALS ── */
+  .test-sec { background: var(--gray-50); }
+  .test-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem; }
+  .rating-badge { display: flex; align-items: center; gap: 10px; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 50px; padding: 8px 18px; }
+  .rating-stars { color: #F5C800; font-size: 16px; letter-spacing: 1px; }
+  .rating-num { font-size: 15px; font-weight: 800; color: var(--black); }
+  .rating-src { font-size: 12px; color: var(--gray-600); }
+  .test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .test-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 1.75rem; transition: border-color .2s, transform .2s; cursor: default; }
+  .test-card:hover { border-color: var(--green); transform: translateY(-3px); }
+  .test-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .test-avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: var(--black); flex-shrink: 0; }
+  .test-name { font-size: 14px; font-weight: 700; color: var(--black); }
+  .test-platform { font-size: 11px; color: var(--gray-600); margin-top: 1px; }
+  .test-stars { color: #F5C800; font-size: 13px; letter-spacing: 1px; }
+  .test-body { font-size: 14px; color: var(--gray-600); line-height: 1.7; font-weight: 400; font-style: italic; }
+  .test-body::before { content: '"'; font-size: 28px; color: var(--green); line-height: 0; vertical-align: -10px; margin-right: 2px; font-style: normal; font-weight: 800; }
+
+  /* ── FAQ ── */
+  .faq-sec { background: var(--white); }
+  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: flex-start; margin-top: 3rem; }
+  .faq-list { display: flex; flex-direction: column; gap: 0; }
+  .faq-item { border-bottom: 1px solid var(--gray-100); }
+  .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; cursor: pointer; gap: 16px; }
+  .faq-q-text { font-size: 15px; font-weight: 700; color: var(--black); }
+  .faq-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; transition: all .2s; font-weight: 700; color: var(--black); }
+  .faq-item.open .faq-icon { background: var(--green); color: var(--black); transform: rotate(45deg); }
+  .faq-a { font-size: 14px; color: var(--gray-600); line-height: 1.75; padding-bottom: 18px; display: none; font-weight: 400; }
+  .faq-item.open .faq-a { display: block; }
+  .faq-cta-box { background: var(--black); border-radius: 24px; padding: 2.5rem; text-align: center; }
+  .faq-cta-title { font-size: 24px; font-weight: 800; color: var(--white); letter-spacing: -0.5px; margin-bottom: 10px; }
+  .faq-cta-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 1.75rem; line-height: 1.6; }
+  .btn-faq { font-family: var(--font); background: var(--green); color: var(--black); border: none; padding: 13px 28px; border-radius: 50px; font-size: 14px; font-weight: 800; cursor: pointer; transition: all .2s; }
+  .btn-faq:hover { background: var(--green-dark); transform: scale(1.03); }
+
+  /* ── CTA ── */
+  .cta-sec { background: var(--green); text-align: center; padding: 6rem 5vw; }
+  .cta-title { font-size: clamp(32px, 5vw, 58px); font-weight: 900; color: var(--black); letter-spacing: -2px; line-height: 1.05; margin-bottom: 1.1rem; }
+  .cta-sub { font-size: 18px; color: rgba(0,0,0,0.6); margin-bottom: 2.5rem; font-weight: 400; }
+  .btn-cta { font-family: var(--font); background: var(--black); color: var(--white); border: none; padding: 16px 44px; border-radius: 50px; font-size: 16px; font-weight: 800; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-cta:hover { transform: scale(1.04); box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
+  .store-badges { display: flex; gap: 12px; justify-content: center; margin-top: 1.75rem; }
+  .store-badge { background: rgba(0,0,0,0.1); border: 1.5px solid rgba(0,0,0,0.2); border-radius: 10px; padding: 8px 20px; font-family: var(--font); font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.75); cursor: pointer; transition: background .2s; display: flex; align-items: center; gap: 7px; }
+  .store-badge:hover { background: rgba(0,0,0,0.18); }
+
+  /* ── FOOTER ── */
+  footer { background: #080808; padding: 3.5rem 5vw 2rem; }
+  .footer-top { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .footer-logo { font-size: 22px; font-weight: 800; color: white; margin-bottom: 10px; }
+  .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.35); font-weight: 400; max-width: 220px; line-height: 1.6; }
+  .footer-cols { display: flex; gap: 4rem; flex-wrap: wrap; }
+  .footer-col-title { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
+  .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.35); text-decoration: none; margin-bottom: 9px; transition: color .2s; }
+  .footer-col a:hover { color: var(--green); }
+  .footer-bottom { max-width: 1200px; margin: 2rem auto 0; display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.2); flex-wrap: wrap; gap: 0.5rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-inner, .how-grid, .pay-grid, .faq-grid { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .services-grid, .test-grid { grid-template-columns: repeat(2, 1fr); }
+    .sec-grid { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { display: none; }
+    .cred-item { padding: 1rem 2rem; }
+  }
+  @media (max-width: 540px) {
+    .services-grid, .test-grid, .sec-grid { grid-template-columns: 1fr; }
+    .cred-inner { flex-direction: column; gap: 0; }
+    .cred-item::after { display: none; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+  .hero-badge  { animation: fadeUp .5s .0s both; }
+  .hero h1     { animation: fadeUp .55s .1s both; }
+  .hero-sub    { animation: fadeUp .55s .2s both; }
+  .hero-btns   { animation: fadeUp .55s .3s both; }
+  .hero-visual { animation: fadeUp .6s .25s both; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<nav>
+  <a class="nav-logo" href="#">AUTORITY<span class="logo-dot">·</span></a>
+  <div class="nav-links">
+    <a href="#" class="active">Inicio</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#pay">Autority Pay</a>
+    <a href="#">Blog</a>
+    <a href="#">Ayuda</a>
+  </div>
+  <div class="nav-actions">
+    <a class="btn-login" href="#">Iniciar sesión</a>
+    <button class="btn-register">Crear cuenta →</button>
+  </div>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="hero">
+  <div class="hero-glow g1"></div>
+  <div class="hero-glow g2"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">
+        <span class="badge-pulse"></span>
+        Disponible en Ecuador 🇪🇨
+      </div>
+      <h1>Paga la luz, el SRI,<br>la matrícula y más.<br><em>Sin filas.</em></h1>
+      <p class="hero-sub">
+        Autority es la plataforma ecuatoriana donde puedes pagar más de 350 servicios — hogar, vehículos, impuestos, gobierno, recargas y más — desde tu celular, tablet o computadora, en segundos.
+      </p>
+      <div class="hero-btns">
+        <button class="btn-hero-primary">Empieza gratis →</button>
+        <button class="btn-hero-ghost">▶ Ver cómo funciona</button>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div style="position:relative;display:inline-block;">
+        <div class="fb f1">
+          <span class="fb-ico">⚡</span>
+          <div>
+            <div class="fb-lbl">Autority Pay</div>
+            <div class="fb-val green">Instantáneo</div>
+          </div>
+        </div>
+        <div class="fb f2">
+          <span class="fb-ico">🔒</span>
+          <div>
+            <div class="fb-lbl">Pago</div>
+            <div class="fb-val">Verificado ✓</div>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-pill"></div>
+          <div class="phone-top">
+            <div>
+              <div class="phone-greeting">Hola de nuevo,</div>
+              <div class="phone-username">Carlos M.</div>
+            </div>
+            <div class="phone-avatar">CM</div>
+          </div>
+          <div class="balance-card">
+            <div class="bal-lbl">SALDO DISPONIBLE</div>
+            <div class="bal-amt">$1,245.00</div>
+            <div class="bal-row"><span>**** 4821</span><span>Ecuador 🇪🇨</span></div>
+          </div>
+          <div class="quick-grid">
+            <div class="qb"><div class="qb-icon">💡</div><div class="qb-lbl">Luz</div></div>
+            <div class="qb"><div class="qb-icon">💧</div><div class="qb-lbl">Agua</div></div>
+            <div class="qb"><div class="qb-icon">📱</div><div class="qb-lbl">Recarga</div></div>
+            <div class="qb"><div class="qb-icon">⚡</div><div class="qb-lbl">Pay</div></div>
+          </div>
+          <div class="txs-title">Últimos pagos</div>
+          <div class="tx">
+            <div class="tx-ico">💡</div>
+            <div><div class="tx-nm">ENEL — Electricidad</div><div class="tx-dt">Hoy, 09:14</div></div>
+            <div class="tx-am neg">-$48.00</div>
+          </div>
+          <div class="tx">
+            <div class="tx-ico">🏛</div>
+            <div><div class="tx-nm">SRI — Predial</div><div class="tx-dt">Ayer, 15:30</div></div>
+            <div class="tx-am neg">-$120.00</div>
+          </div>
+          <div class="tx">
+            <div class="tx-ico">⚡</div>
+            <div><div class="tx-nm">Pay recibido</div><div class="tx-dt">Ayer, 11:05</div></div>
+            <div class="tx-am pos">+$200.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ CREDIBILITY STRIP ══════════════════ -->
+<div class="cred-strip">
+  <div class="cred-inner">
+    <div class="cred-item">
+      <div class="cred-num">400<span>k+</span></div>
+      <div class="cred-lbl">usuarios en Ecuador</div>
+    </div>
+    <div class="cred-item">
+      <div class="cred-num">350<span>+</span></div>
+      <div class="cred-lbl">servicios disponibles</div>
+    </div>
+    <div class="cred-item">
+      <div class="cred-num"><span>$</span>0</div>
+      <div class="cred-lbl">para registrarse</div>
+    </div>
+    <div class="cred-item">
+      <div class="cred-num">24<span>/7</span></div>
+      <div class="cred-lbl">disponibilidad</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SERVICES ══════════════════ -->
+<section class="services-sec" id="servicios">
+  <div class="si">
+    <div class="services-header">
+      <div>
+        <span class="stag">¿Qué puedo pagar?</span>
+        <h2 class="stitle">Todo lo que necesitas<br>pagar, en un solo lugar.</h2>
+      </div>
+      <p class="ssub">Desde la planilla de luz hasta el SRI. Si vives en Ecuador, lo puedes pagar en Autority.</p>
+    </div>
+    <div class="services-grid">
+      <div class="svc-card blue">
+        <div>
+          <div class="svc-title">Vehículos</div>
+          <ul class="svc-links">
+            <li><span class="ico">🚦</span> Multas</li>
+            <li><span class="ico">📄</span> Matrícula</li>
+            <li><span class="ico">🛣</span> Peajes</li>
+          </ul>
+        </div>
+        <div class="svc-cta">Paga aquí →</div>
+      </div>
+      <div class="svc-card green">
+        <div>
+          <div class="svc-title">Hogar</div>
+          <ul class="svc-links">
+            <li><span class="ico">📞</span> Telefonía Fija</li>
+            <li><span class="ico">💧</span> Agua</li>
+            <li><span class="ico">💡</span> Luz</li>
+            <li><span class="ico">🌐</span> Internet</li>
+          </ul>
+        </div>
+        <div class="svc-cta">Paga aquí →</div>
+      </div>
+      <div class="svc-card purple">
+        <div>
+          <div class="svc-title">Comunicaciones</div>
+          <ul class="svc-links">
+            <li><span class="ico">📞</span> Telefonía Fija</li>
+            <li><span class="ico">🌐</span> Internet</li>
+            <li><span class="ico">📱</span> Celular</li>
+          </ul>
+        </div>
+        <div class="svc-cta">Paga aquí →</div>
+      </div>
+      <div class="svc-card orange">
+        <div>
+          <div class="svc-title">Impuestos</div>
+          <ul class="svc-links">
+            <li><span class="ico">📋</span> Patente</li>
+            <li><span class="ico">🏠</span> Prediales</li>
+          </ul>
+        </div>
+        <div class="svc-cta">Paga aquí →</div>
+      </div>
+      <div class="svc-card yellow">
+        <div>
+          <div class="svc-title">Gobierno</div>
+          <ul class="svc-links">
+            <li><span class="ico">🏛</span> SRI</li>
+            <li><span class="ico">🏥</span> IESS</li>
+            <li><span class="ico">🗳</span> CNE</li>
+            <li><span class="ico">🚗</span> SUPA</li>
+            <li><span class="ico">📑</span> Registro Civil</li>
+            <li><span class="ico">➕</span> Otros</li>
+          </ul>
+        </div>
+        <div class="svc-cta">Paga aquí →</div>
+      </div>
+      <div class="svc-card coming">
+        <div>
+          <div class="svc-title">Próximamente</div>
+          <ul class="coming-list">
+            <li><span class="coming-dot">A</span> Licencia</li>
+            <li><span class="coming-dot">A</span> Seguros</li>
+            <li><span class="coming-dot">A</span> Y mucho más</li>
+          </ul>
+        </div>
+        <div class="svc-cta">Ver más →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ HOW IT WORKS ══════════════════ -->
+<section class="how-sec" id="como">
+  <div class="si">
+    <span class="stag">¿Cómo funciona?</span>
+    <h2 class="stitle">Pagar nunca fue<br>tan fácil.</h2>
+    <p class="ssub">Sin descargar apps raras, sin ir a ventanillas, sin esperar. Solo busca, ingresa tus datos y listo.</p>
+    <div class="how-grid">
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-step-num">1</div>
+          <div>
+            <div class="how-step-title">Crea tu cuenta gratis</div>
+            <div class="how-step-desc">Regístrate en menos de 2 minutos con tu cédula ecuatoriana. Sin costos de apertura, sin mensualidades, sin letra pequeña.</div>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">2</div>
+          <div>
+            <div class="how-step-title">Busca el servicio que necesitas</div>
+            <div class="how-step-desc">Elige entre más de 350 opciones: luz, agua, impuestos, matrícula vehicular, recargas, SRI, IESS y mucho más.</div>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">3</div>
+          <div>
+            <div class="how-step-title">Ingresa tus datos y confirma</div>
+            <div class="how-step-desc">Escribe el número de tu planilla o cédula según el servicio. Revisa el monto y confirma el pago con un clic.</div>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">4</div>
+          <div>
+            <div class="how-step-title">Recibe tu comprobante al instante</div>
+            <div class="how-step-desc">Te enviamos el comprobante por correo y queda guardado en tu historial. Siempre disponible cuando lo necesites.</div>
+          </div>
+        </div>
+      </div>
+      <div class="how-visual">
+        <div class="how-screen">
+          <div class="how-screen-title">Selecciona un servicio</div>
+          <div class="how-service-row">
+            <div class="how-svc-icon blue">💡</div>
+            <div><div class="how-svc-name">Electricidad</div><div class="how-svc-sub">ENEL, EEQ, CNEL y más</div></div>
+            <div class="how-svc-arrow">›</div>
+          </div>
+          <div class="how-service-row">
+            <div class="how-svc-icon green">🏛</div>
+            <div><div class="how-svc-name">SRI</div><div class="how-svc-sub">Declaraciones e impuestos</div></div>
+            <div class="how-svc-arrow">›</div>
+          </div>
+          <div class="how-service-row">
+            <div class="how-svc-icon purple">🚗</div>
+            <div><div class="how-svc-name">Matrícula vehicular</div><div class="how-svc-sub">Pago rápido por placa</div></div>
+            <div class="how-svc-arrow">›</div>
+          </div>
+        </div>
+        <div class="how-confirm-box">
+          <div>
+            <div class="how-confirm-label">Total a pagar</div>
+            <div class="how-confirm-val">$48.50</div>
+          </div>
+          <div class="how-confirm-badge">✓ Pago confirmado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ AUTORITY PAY ══════════════════ -->
+<section class="pay-sec" id="pay">
+  <div class="si">
+    <span class="stag">Autority Pay</span>
+    <h2 class="stitle" style="color:white;">Envía dinero al instante.<span class="new-pill">NUEVO</span></h2>
+    <p class="ssub">De tu tarjeta a cualquier cuenta bancaria en Ecuador, en segundos. Sin filas, sin esperas, sin complicaciones.</p>
+    <div class="pay-grid">
+      <div>
+        <div class="pay-feat">
+          <div class="pay-feat-ico">⚡</div>
+          <div>
+            <div class="pay-feat-title">Transferencia instantánea</div>
+            <div class="pay-feat-desc">El dinero llega en segundos a cualquier banco del Ecuador.</div>
+          </div>
+        </div>
+        <div class="pay-feat">
+          <div class="pay-feat-ico">💳</div>
+          <div>
+            <div class="pay-feat-title">Desde tu tarjeta</div>
+            <div class="pay-feat-desc">Usa tu tarjeta de débito o crédito para enviar directamente a una cuenta bancaria.</div>
+          </div>
+        </div>
+        <div class="pay-feat">
+          <div class="pay-feat-ico">🔒</div>
+          <div>
+            <div class="pay-feat-title">100% seguro</div>
+            <div class="pay-feat-desc">Cada transacción está cifrada y verificada en tiempo real.</div>
+          </div>
+        </div>
+        <div class="pay-feat">
+          <div class="pay-feat-ico">📲</div>
+          <div>
+            <div class="pay-feat-title">Solo necesitas el número de cuenta</div>
+            <div class="pay-feat-desc">Nada más. Sin pasos extra ni formularios complicados.</div>
+          </div>
+        </div>
+      </div>
+      <div class="pay-box">
+        <div class="pay-box-header">Autority Pay — nueva transferencia</div>
+        <div class="pay-row">
+          <div class="pay-chip">
+            <div class="pay-chip-lbl">Desde</div>
+            <div class="pay-chip-val">Visa *4821</div>
+            <div class="pay-chip-sub">Tu tarjeta</div>
+          </div>
+          <div class="arrow-btn">→</div>
+          <div class="pay-chip">
+            <div class="pay-chip-lbl">Hacia</div>
+            <div class="pay-chip-val">Banco Pichincha</div>
+            <div class="pay-chip-sub">Cta. corriente</div>
+          </div>
+        </div>
+        <div class="pay-amount-box">
+          <div>
+            <div class="pay-amount-lbl">Monto a enviar</div>
+            <div class="pay-amount-val">$250.00</div>
+          </div>
+          <div class="pay-instant-lbl">⚡ Llega al instante</div>
+        </div>
+        <button class="pay-btn">Enviar ahora →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ SECURITY ══════════════════ -->
+<section class="sec-section">
+  <div class="si">
+    <div style="text-align:center; margin-bottom: 1rem;">
+      <span class="stag" style="display:inline-block;">Seguridad</span>
+    </div>
+    <h2 class="stitle" style="color:white; text-align:center; max-width:600px; margin:0 auto 14px;">Tu dinero y tus datos<br>están protegidos.</h2>
+    <p class="ssub" style="text-align:center; margin:0 auto; color:rgba(255,255,255,0.5);">Autority usa los mismos estándares de seguridad que los principales bancos del país.</p>
+    <div class="sec-grid">
+      <div class="sec-card">
+        <div class="sec-ico">🔐</div>
+        <div class="sec-title">Cifrado de extremo a extremo</div>
+        <div class="sec-desc">Toda la información viaja cifrada. Nadie, ni nosotros, puede ver tus datos de pago.</div>
+      </div>
+      <div class="sec-card">
+        <div class="sec-ico">✅</div>
+        <div class="sec-title">Verificación en tiempo real</div>
+        <div class="sec-desc">Cada transacción se verifica antes de procesarse. Si algo falla, te avisamos al instante.</div>
+      </div>
+      <div class="sec-card">
+        <div class="sec-ico">🚫</div>
+        <div class="sec-title">No guardamos datos de tarjeta</div>
+        <div class="sec-desc">Tus datos bancarios nunca se almacenan en nuestros servidores. Siempre seguros.</div>
+      </div>
+      <div class="sec-card">
+        <div class="sec-ico">🇪🇨</div>
+        <div class="sec-title">Respaldo legal en Ecuador</div>
+        <div class="sec-desc">Operamos bajo la normativa ecuatoriana vigente. Somos una empresa local con respaldo real.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ TESTIMONIALS ══════════════════ -->
+<section class="test-sec">
+  <div class="si">
+    <div class="test-header">
+      <div>
+        <span class="stag">Testimonios</span>
+        <h2 class="stitle">Lo que dicen<br>nuestros usuarios.</h2>
+      </div>
+      <div class="rating-badge">
+        <span class="rating-stars">★★★★★</span>
+        <span class="rating-num">4.8</span>
+        <span class="rating-src">Google Play · App Store</span>
+      </div>
+    </div>
+    <div class="test-grid">
+
+      <div class="test-card">
+        <div class="test-top">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="test-avatar" style="background:#e8f5e9;">🟢</div>
+            <div>
+              <div class="test-name">Iveth Mejía</div>
+              <div class="test-platform">Google Play · Ecuador</div>
+            </div>
+          </div>
+          <div class="test-stars">★★★★☆</div>
+        </div>
+        <div class="test-body">Bien gracias. Pago mis servicios sin problema, la app es muy fácil de usar y nunca me ha fallado un pago.</div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-top">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="test-avatar" style="background:#e3f2fd;">💙</div>
+            <div>
+              <div class="test-name">Michu G.</div>
+              <div class="test-platform">Google Play · Ecuador</div>
+            </div>
+          </div>
+          <div class="test-stars">★★★★★</div>
+        </div>
+        <div class="test-body">Excelente. Pagué la matrícula de mi carro en 3 minutos desde mi casa. Antes perdía medio día en la ventanilla.</div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-top">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="test-avatar" style="background:#fce4ec;">❤️</div>
+            <div>
+              <div class="test-name">AnDrEs VeRgArA</div>
+              <div class="test-platform">Google Play · Ecuador</div>
+            </div>
+          </div>
+          <div class="test-stars">★★★★★</div>
+        </div>
+        <div class="test-body">Genial. Tenía miedo de pagar en línea pero me llegó el comprobante al instante. Muy confiable.</div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-top">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="test-avatar" style="background:#fff8e1;">⭐</div>
+            <div>
+              <div class="test-name">Patricia Andrade</div>
+              <div class="test-platform">App Store · Ecuador</div>
+            </div>
+          </div>
+          <div class="test-stars">★★★★★</div>
+        </div>
+        <div class="test-body">Me encanta que puedo pagar el IESS, el agua y la luz todo en la misma app. Ya no uso otra cosa.</div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-top">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="test-avatar" style="background:#f3e5f5;">💜</div>
+            <div>
+              <div class="test-name">Roberto Suárez</div>
+              <div class="test-platform">App Store · Ecuador</div>
+            </div>
+          </div>
+          <div class="test-stars">★★★★★</div>
+        </div>
+        <div class="test-body">Autority Pay me salvó. Tenía que enviar dinero urgente y en menos de un minuto ya estaba en la cuenta de mi familiar.</div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-top">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="test-avatar" style="background:#e8f5e9;">🌿</div>
+            <div>
+              <div class="test-name">Gabriela Torres</div>
+              <div class="test-platform">App Store · Ecuador</div>
+            </div>
+          </div>
+          <div class="test-stars">★★★★★</div>
+        </div>
+        <div class="test-body">Super recomendada. Pago todos los servicios del hogar desde el trabajo. El historial de pagos es muy útil.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FAQ ══════════════════ -->
+<section class="faq-sec" id="faq">
+  <div class="si">
+    <span class="stag">Preguntas frecuentes</span>
+    <h2 class="stitle">¿Tienes dudas?<br>Las resolvemos aquí.</h2>
+    <div class="faq-grid">
+      <div class="faq-list">
+
+        <div class="faq-item open">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">¿Cuánto cuesta usar Autority?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Registrarse en Autority es completamente gratis. Algunos servicios pueden tener una pequeña comisión de procesamiento, que siempre se muestra antes de confirmar el pago. Sin sorpresas.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">¿Necesito una cuenta bancaria para usar Autority?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">No necesariamente. Puedes pagar con tarjeta de débito o crédito. Para usar Autority Pay (envío de dinero), sí necesitas una tarjeta desde la cual enviar.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">¿En cuánto tiempo se procesa mi pago?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">La mayoría de los pagos se confirman en segundos. Una vez confirmado, recibirás tu comprobante por correo electrónico de forma inmediata.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">¿Qué pasa si mi pago falla?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Si el pago no se procesa correctamente, no se te cobra. Te notificamos de inmediato y puedes intentarlo de nuevo. Si ya fue cobrado y el pago no se aplicó, nuestro equipo de soporte lo resuelve en menos de 24 horas.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">¿Autority está disponible fuera de Ecuador?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Por ahora Autority opera únicamente en Ecuador. Estamos trabajando para expandirnos a más países de Latinoamérica muy pronto.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">¿Puedo usar Autority desde el navegador sin descargar nada?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Sí. Puedes acceder desde autority.io en cualquier navegador y dispositivo. También tenemos app disponible en App Store y Google Play si prefieres tenerla en tu celular.</div>
+        </div>
+
+      </div>
+
+      <div class="faq-cta-box">
+        <div style="font-size:36px; margin-bottom:12px;">🙋</div>
+        <div class="faq-cta-title">¿No encontraste<br>tu respuesta?</div>
+        <div class="faq-cta-sub">Nuestro equipo de soporte está disponible todos los días para ayudarte con cualquier duda.</div>
+        <button class="btn-faq">Hablar con soporte →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ CTA FINAL ══════════════════ -->
+<section class="cta-sec">
+  <div class="si">
+    <h2 class="cta-title">El Ecuador paga<br>con Autority.</h2>
+    <p class="cta-sub">Únete a más de 400,000 ecuatorianos. Gratis, sin complicaciones.</p>
+    <button class="btn-cta">Crear mi cuenta gratis →</button>
+    <div class="store-badges">
+      <div class="store-badge">🍎 App Store</div>
+      <div class="store-badge">▶ Google Play</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">AUTORITY<span style="color:var(--green);">·</span></div>
+      <div class="footer-tagline">Todos tus pagos en un solo lugar. Hecho en Ecuador.</div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Servicios</div>
+        <a href="#">Vehículos</a>
+        <a href="#">Hogar</a>
+        <a href="#">Comunicaciones</a>
+        <a href="#">Impuestos</a>
+        <a href="#">Gobierno</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Producto</div>
+        <a href="#">Autority Pay</a>
+        <a href="#">Blog</a>
+        <a href="#">Preguntas frecuentes</a>
+        <a href="#">Ayuda</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="#">Privacidad</a>
+        <a href="#">Términos de uso</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Autority. Todos los derechos reservados.</span>
+    <span>Ecuador 🇪🇨</span>
+  </div>
+</footer>
+
+<script>
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+
+</body>
+</html>
